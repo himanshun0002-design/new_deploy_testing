@@ -1,0 +1,1 @@
+web: cd socity_project && gunicorn --chdir ../ socity_project.wsgi:application

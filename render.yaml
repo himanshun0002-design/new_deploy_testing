@@ -2,8 +2,10 @@ services:
   - type: web
     name: socity-app
     runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn socity_project.wsgi:application
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: cd socity_project && gunicorn --chdir ../ socity_project.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
@@ -11,3 +13,5 @@ services:
         value: socity_project.settings_prod
       - key: PORT
         value: 8000
+      - key: WEB_CONCURRENCY
+        value: 4
