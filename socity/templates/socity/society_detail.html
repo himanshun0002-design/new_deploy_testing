@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ society.name }} - Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: #34495e;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .society-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .society-name {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .society-address {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .society-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .flats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .flat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .flat-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .flat-details {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-occupied {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .status-available {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .residents-section {
+            margin-top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .residents-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resident-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .resident-info h3 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .resident-info p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .add-flat-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-flat-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">🏠 Our Society</a>
+        <div class="nav-links">
+            <a href="{% url 'socity:home' %}">Home</a>
+            <a href="{% url 'socity:society_list' %}">Societies</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'socity:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'socity:login' %}">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="society-header">
+            <h1 class="society-name">{{ society.name }}</h1>
+            <a href="{% url 'socity:add_flat' society.id %}" class="add-flat-btn">Add New Flat</a>
+            <p class="society-address">{{ society.address }}</p>
+            <div class="society-stats">
+                <div class="stat-card">
+                    <div class="stat-value">{{ flats.count }}</div>
+                    <div class="stat-label">Total Flats</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ flats.occupied_count }}</div>
+                    <div class="stat-label">Occupied Flats</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ residents.count }}</div>
+                    <div class="stat-label">Total Residents</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flats-section">
+            <h2 class="section-title">Flats</h2>
+            {% if user.is_staff %}
+                <a href="{% url 'socity:add_flat' society.id %}" class="add-flat-btn">Add New Flat</a>
+            {% endif %}
+            <div class="flats-grid">
+                {% for flat in flats %}
+                <div class="flat-card">
+                    <h3 class="flat-number">Flat {{ flat.flat_number }}</h3>
+                    <div class="flat-details">
+                        <p>Floor: {{ flat.floor }}</p>
+                        {% if flat.is_occupied %}
+                            <span class="status-badge status-occupied">Occupied</span>
+                        {% else %}
+                            <span class="status-badge status-available">Available</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p>No flats registered yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="residents-section">
+            <h2 class="section-title">Residents</h2>
+            <div class="residents-list">
+                {% for resident in residents %}
+                <div class="resident-card">
+                    <div class="resident-info">
+                        <h3>{{ resident.user.get_full_name|default:resident.user.username }}</h3>
+                        <p>Flat: {{ resident.flat.flat_number }}</p>
+                        <p>{{ resident.is_owner|yesno:"Owner,Tenant" }}</p>
+                        <p>Since: {{ resident.move_in_date|date:"M Y" }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No residents registered yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

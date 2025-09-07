@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Societies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Include the same base styles as other templates */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: #34495e;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .society-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .society-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .society-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .society-name {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .society-address {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .society-stats {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .add-society-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-society-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">🏠 Our Society</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/services">Services</a>
+            <a href="/contact">Contact</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'socity:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'socity:login' %}">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Registered Societies</h1>
+        {% if user.is_authenticated %}
+            <a href="{% url 'socity:add_society' %}" class="add-society-btn">Add New Society</a>
+        {% endif %}
+
+        <div class="society-grid">
+            {% for society in societies %}
+                <div class="society-card">
+                    <h2 class="society-name">{{ society.name }}</h2>
+                    <p class="society-address">{{ society.address }}</p>
+                    <div class="society-stats">
+                        <div class="stat">
+                            <div class="stat-value">{{ society.flats.count }}</div>
+                            <div class="stat-label">Flats</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">{{ society.occupied_count }}</div>
+                            <div class="stat-label">Occupied</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">{{ society.created_at|date:"M Y" }}</div>
+                            <div class="stat-label">Since</div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No societies registered yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

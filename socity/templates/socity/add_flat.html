@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Our Society</title>
+    <title>Add New Flat - {{ society.name }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Include the same base styles as other templates */
         * {
             margin: 0;
             padding: 0;
@@ -16,8 +17,6 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .navbar {
@@ -47,21 +46,19 @@
             color: #3498db;
         }
 
-        .login-container {
-            max-width: 400px;
-            margin: auto;
+        .form-container {
+            max-width: 600px;
+            margin: 4rem auto;
             padding: 2rem;
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-top: 4rem;
         }
 
         h1 {
             color: #2c3e50;
-            text-align: center;
             margin-bottom: 2rem;
-            font-size: 2rem;
+            text-align: center;
         }
 
         .form-group {
@@ -76,8 +73,7 @@
         }
 
         input[type="text"],
-        input[type="password"],
-        input[type="email"] {
+        input[type="number"] {
             width: 100%;
             padding: 0.8rem;
             border: 2px solid #e0e0e0;
@@ -87,8 +83,7 @@
         }
 
         input[type="text"]:focus,
-        input[type="password"]:focus,
-        input[type="email"]:focus {
+        input[type="number"]:focus {
             border-color: #3498db;
             outline: none;
         }
@@ -109,73 +104,31 @@
         .submit-btn:hover {
             background: #2980b9;
         }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #7f8c8d;
-        }
-
-        .form-footer a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            background-color: #ff6b6b;
-            color: white;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-
-        .success-message {
-            background-color: #51cf66;
-            color: white;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <a href="/" class="logo">🏠 Our Society</a>
         <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/services">Services</a>
-            <a href="/contact">Contact</a>
+            <a href="{% url 'socity:home' %}">Home</a>
+            <a href="{% url 'socity:society_list' %}">Societies</a>
+            <a href="{% url 'socity:society_detail' society.id %}">Back to Society</a>
         </div>
     </nav>
 
-    <div class="login-container">
-        <h1>Login</h1>
-        {% if messages %}
-            {% for message in messages %}
-                <div class="{% if message.tags %}{{ message.tags }}-message{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-        <form method="post" action="{% url 'socity:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+    <div class="form-container">
+        <h1>Add New Flat</h1>
+        <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <label for="flat_number">Flat Number</label>
+                {{ form.flat_number }}
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <label for="floor">Floor</label>
+                {{ form.floor }}
             </div>
-            <button type="submit" class="submit-btn">Login</button>
-            <div class="form-footer">
-                Don't have an account? <a href="{% url 'socity:register' %}">Register here</a>
-            </div>
+            <button type="submit" class="submit-btn">Add Flat</button>
         </form>
     </div>
 </body>
