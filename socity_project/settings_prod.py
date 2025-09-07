@@ -5,11 +5,15 @@ import os
 DEBUG = False
 
 # Add your domain name or IP address here
-ALLOWED_HOSTS = ['*']  # Replace '*' with your domain or IP address
+ALLOWED_HOSTS = ['*.onrender.com', 'localhost', '127.0.0.1']
 
 # Static files configuration
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+# Simplified static file serving
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Security settings
 SECURE_BROWSER_XSS_FILTER = True
