@@ -8,12 +8,13 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 """
 
 import os
-
 from django.core.wsgi import get_wsgi_application
+from whitenoise import WhiteNoise
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'socity_project.settings_prod')
 
 application = get_wsgi_application()
+application = WhiteNoise(application)
 
 # For debugging purposes
 if __name__ == '__main__':
